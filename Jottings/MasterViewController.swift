@@ -41,10 +41,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func insertNewObject(_ sender: Any) {
         let context = self.fetchedResultsController.managedObjectContext
         let newEvent = Event(context: context)
-             
+        
         // If appropriate, configure the new managed object.
         newEvent.timestamp = NSDate()
-
+        newEvent.title = "Appelsin"
+        
         // Save the context.
         do {
             try context.save()
@@ -97,7 +98,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if editingStyle == .delete {
             let context = self.fetchedResultsController.managedObjectContext
             context.delete(self.fetchedResultsController.object(at: indexPath))
-                
+            
             do {
                 try context.save()
             } catch {
@@ -110,7 +111,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(_ cell: UITableViewCell, withEvent event: Event) {
-        cell.textLabel!.text = event.timestamp!.description
+        cell.textLabel!.text = event.title //event.timestamp!.description
     }
 
     // MARK: - Fetched results controller
