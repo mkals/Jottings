@@ -8,25 +8,39 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
-
+class DetailViewController: UIViewController, UITextFieldDelegate {
+    
     
     @IBOutlet weak var detailDateCreated: UILabel!
     @IBOutlet weak var detailBody: UITextView!
     @IBOutlet weak var detailTitle: UITextField!
-
-
+    
+    
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem {
+            
             if let field = detailDateCreated {
-                field.text = "Created: " + detail.timestamp!.description
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .none
+                
+                field.text = "Created: " + dateFormatter.string(from: (detail.timestamp! as Date))
             }
+            
             if let field = detailBody {
                 field.text = detail.body
             }
+            
             if let field = detailTitle {
-                field.text = detail.title
+                
+                if let title = detail.title {
+                    field.text = title
+                } else {
+                    detailTitle.delegate = self
+                    detailTitle.becomeFirstResponder()
+                }
             }
         }
     }
@@ -49,34 +63,32 @@ class DetailViewController: UIViewController {
         didSet {
             // Update the view.
             self.configureView()
+            
+            // Update the database
+            do {
+                try self.detailItem?.managedObjectContext?.save()
+            } catch {
+                // alert user
+                let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have coppied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)") // TODO: remove before deploy
+            }
         }
     }
     
     func saveTitle() {
         if let detail = self.detailItem {
             detail.title = detailTitle.text
-            saveToDatabase(detail)
         }
     }
     
     func saveBody() {
         if let detail = self.detailItem {
             detail.body = detailBody.text
-            saveToDatabase(detail)
         }
     }
-    
-    func saveToDatabase(_ detail:Event) {
-        do {
-            try detail.managedObjectContext?.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-    }
-    
-    
 }
 
