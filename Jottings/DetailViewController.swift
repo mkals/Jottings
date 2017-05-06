@@ -15,6 +15,28 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var detailBody: UITextView!
     @IBOutlet weak var detailTitle: UITextField!
     
+    @IBOutlet weak var lockButton: UIBarButtonItem!
+    
+    var lock : Bool = false {
+        didSet {
+            if lock {
+                lockButton.title = "Locked"
+                self.detailTitle.isEnabled = false
+                self.detailBody.isEditable = false
+            } else {
+                lockButton.title = "Unlocked"
+                self.detailTitle.isEnabled = true
+                self.detailBody.isEditable = true
+            }
+        }
+    }
+    
+    @IBAction func locking(_ sender: AnyObject) {
+        lock = !lock
+    }
+    
+    @IBAction func versioning(_ sender: AnyObject) {
+    }
     
     func configureView() {
         // Update the user interface for the detail item.
