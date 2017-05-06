@@ -10,34 +10,31 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var detailDateCreated: UILabel!
     @IBOutlet weak var detailBody: UITextView!
+    @IBOutlet weak var detailTitle: UITextField!
 
 
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                
-                if let title = detail.title {
-                    self.navigationItem.title = title
-                } else {
-                    self.navigationItem.title = "Untitled note"
-                }
-                
-                detailBody.text = detail.body
-                
-                label.text = detail.timestamp!.description
+            if let field = detailDateCreated {
+                field.text = "Created: " + detail.timestamp!.description
+            }
+            if let field = detailBody {
+                field.text = detail.body
+            }
+            if let field = detailTitle {
+                field.text = detail.title
             }
         }
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
+        
+        // Notification for end of editing
         NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
     }
 
