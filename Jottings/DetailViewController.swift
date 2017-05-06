@@ -81,7 +81,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    var detailItem: Event? {
+    var detailItem: Jotting? {
         didSet {
             // Update the view.
             self.configureView()
