@@ -10,6 +10,7 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    
     @IBOutlet weak var detailDateCreated: UILabel!
     @IBOutlet weak var detailBody: UITextView!
     @IBOutlet weak var detailTitle: UITextField!
@@ -34,8 +35,9 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         self.configureView()
         
-        // Notification for end of editing
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
+        // Alterts to autosave when ending editing
+        NotificationCenter.default.addObserver(self, selector: #selector(saveBody), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(saveTitle), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,21 +52,31 @@ class DetailViewController: UIViewController {
         }
     }
     
-    func save() {
+    func saveTitle() {
         if let detail = self.detailItem {
-            detail.body = detailBody.text
-            
-            do {
-                try detail.managedObjectContext?.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            detail.title = detailTitle.text
+            saveToDatabase(detail)
         }
     }
     
-
+    func saveBody() {
+        if let detail = self.detailItem {
+            detail.body = detailBody.text
+            saveToDatabase(detail)
+        }
+    }
+    
+    func saveToDatabase(_ detail:Event) {
+        do {
+            try detail.managedObjectContext?.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
+    
+    
 }
 
