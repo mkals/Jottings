@@ -20,6 +20,7 @@
 		E976CBB01EBEF42A00236037 /* Jotting+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */; };
 		E976CBB31EBEF75300236037 /* Version+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */; };
 		E976CBB41EBEF75300236037 /* Version+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */; };
+		E9EEADF21EBF075F00249925 /* VersionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Jotting+CoreDataProperties.swift"; path = "Core Data/Jotting+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataClass.swift"; path = "Core Data/Version+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataProperties.swift"; path = "Core Data/Version+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				E90BACFB1EBDADFA0044CA0F /* MasterViewController.swift */,
 				E90BACFD1EBDADFA0044CA0F /* DetailViewController.swift */,
 				E90BACFF1EBDADFA0044CA0F /* Main.storyboard */,
+				E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */,
 				E90BAD021EBDADFA0044CA0F /* Assets.xcassets */,
 				E90BAD041EBDADFA0044CA0F /* LaunchScreen.storyboard */,
 				E90BAD071EBDADFA0044CA0F /* Info.plist */,
@@ -282,6 +285,7 @@
 			files = (
 				E976CBB41EBEF75300236037 /* Version+CoreDataProperties.swift in Sources */,
 				E976CBB31EBEF75300236037 /* Version+CoreDataClass.swift in Sources */,
+				E9EEADF21EBF075F00249925 /* VersionsTableViewController.swift in Sources */,
 				E90BACF71EBDADFA0044CA0F /* AppDelegate.swift in Sources */,
 				E90BACFA1EBDADFA0044CA0F /* Jottings.xcdatamodeld in Sources */,
 				E90BACFC1EBDADFA0044CA0F /* MasterViewController.swift in Sources */,

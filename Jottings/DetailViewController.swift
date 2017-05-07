@@ -48,7 +48,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
                 dateFormatter.dateStyle = .medium
                 dateFormatter.timeStyle = .none
                 
-                field.text = "Created: " + dateFormatter.string(from: (detail.timestamp! as Date))
+                field.text = "Created: " + dateFormatter.string(from: (detail.timestamp! as Date)) + " with versions: " + String(describing: detail.versions?.count)
             }
             
             if let field = detailBody {
@@ -94,7 +94,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
                 let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have coppied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
-            
+                
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)") // TODO: remove before deploy
             }
