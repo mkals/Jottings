@@ -65,7 +65,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             controller.navigationItem.leftItemsSupplementBackButton = true
         }
     }
-
+    
     // MARK: - Table View
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -106,10 +106,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(_ cell: UITableViewCell, withEvent jotting: Jotting) {
-        cell.textLabel!.text = jotting.title //event.timestamp!.description
+        cell.textLabel!.text = jotting.current?.title //event.timestamp!.description
     }
 
-    // MARK: - Fetched results controller
+    // MARK: - Fetched results controlleres
 
     var fetchedResultsController: NSFetchedResultsController<Jotting> {
         if _fetchedResultsController != nil {

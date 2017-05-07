@@ -40,7 +40,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = self.detailItem {
+        if let detail = self.detailItem  {
             
             if let field = detailDateCreated {
                 
@@ -52,12 +52,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             }
             
             if let field = detailBody {
-                field.text = detail.body
+                field.text = detail.current?.body
             }
             
             if let field = detailTitle {
                 
-                if let title = detail.title {
+                if let title = detail.current?.title {
                     field.text = title
                 } else {
                     detailTitle.delegate = self
@@ -72,8 +72,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         self.configureView()
         
         // Alterts to autosave when ending editing
-        NotificationCenter.default.addObserver(self, selector: #selector(saveBody), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(saveTitle), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -101,15 +101,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func saveTitle() {
+    func save() {
         if let detail = self.detailItem {
-            detail.title = detailTitle.text
-        }
-    }
-    
-    func saveBody() {
-        if let detail = self.detailItem {
-            detail.body = detailBody.text
+            if let context = self.detailItem?.managedObjectContext {
+                let newVersion = Version(context: context)
+                newVersion.jotting = detail
+                newVersion.timestamp = NSDate()
+                newVersion.body = detailBody.text
+                newVersion.title = detailTitle.text
+            }
         }
     }
 }
