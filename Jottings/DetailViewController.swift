@@ -65,6 +65,14 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 }
             }
         }
+        
+        if indexForVersion != nil {
+            lockButton.isHidden = true
+            
+            
+            let saveButton = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(revertToThisVersion))
+            self.navigationItem.rightBarButtonItem = saveButton
+        }
     }
 
     
@@ -128,7 +136,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     }
     
     func revertToThisVersion() {
-        
+        if let detail = self.detailItem {
+            if let context = self.detailItem?.managedObjectContext {
+                let newVersion = Version(context: context)
+                newVersion.jotting = detail
+                newVersion.timestamp = Date()
+                let oldVersion = detail.versionAt(indexPath: indexForVersion)
+                newVersion.body = oldVersion.body
+                newVersion.title = oldVersion.title
+            }
+        }
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
