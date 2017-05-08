@@ -11,7 +11,7 @@ import CoreData
 
 
 public class Jotting: NSManagedObject {
-    
+        
     var current : Version? {
         get {
             return versionsArray.last
@@ -58,7 +58,14 @@ public class Jotting: NSManagedObject {
         if let path = indexPath {
             return versionsArrayDates[path.section][path.row]
         } else {
-            return versionsArray.last!
+            if let last = versionsArray.last {
+                return last
+            } else {
+                let ver = Version(context: self.managedObjectContext!)
+                ver.jotting = self
+                ver.timestamp = Date()
+                return ver
+            }
         }
     }
 }

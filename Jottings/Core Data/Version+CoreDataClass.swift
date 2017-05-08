@@ -11,6 +11,7 @@ import CoreData
 
 
 public class Version: NSManagedObject {
+    
 //    
 //    init(context: NSManagedObjectContext, jotting: Jotting, title: String, body: String) {
 //        super.init(context: context)

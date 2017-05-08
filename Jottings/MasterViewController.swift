@@ -39,9 +39,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func insertNewObject(_ sender: Any) {
-        
-        self.performSegue(withIdentifier: "showDetail", sender: nil)
-
+        self.performSegue(withIdentifier: "showDetail", sender: "insertNew")
     }
     
     // MARK: - Segues
@@ -51,13 +49,15 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             
             var object : Jotting?
             
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                object = self.fetchedResultsController.object(at: indexPath)
-            } else {
+            if sender as? String == "insertNew" {
                 // Adding new entry
                 let context = self.fetchedResultsController.managedObjectContext
-                object = Jotting(context: context)
+                object = Jotting.init(entity: Jotting.entity(), insertInto: context)
                 object!.timestamp = Date()
+            } else if let indexPath = self.tableView.indexPathForSelectedRow {
+                object = self.fetchedResultsController.object(at: indexPath)
+            } else {
+                fatalError()
             }
             
             let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
