@@ -16,7 +16,7 @@ extension Jotting {
         return NSFetchRequest<Jotting>(entityName: "Jotting");
     }
     
-    @NSManaged public var timestamp: NSDate?
+    @NSManaged public var timestamp: Date
     @NSManaged public var versions: NSSet?
 
 }

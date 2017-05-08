@@ -9,15 +9,24 @@
 import UIKit
 
 class VersionsTableViewController: UITableViewController {
-
+    
+    var jotting : Jotting?
+    
+    var orderedVersions : Array<Array<Version>> {
+        if let object = jotting {
+            return object.versionsArrayDates
+        } else {
+            return Array<Array<Version>>()
+        }
+    }
+    
+    @IBAction func cancel(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,25 +37,39 @@ class VersionsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return orderedVersions.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return orderedVersions[section].count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        // Configure the cell...
+        let version = orderedVersions[indexPath.section][indexPath.row]
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .medium
+        
+        cell.textLabel?.text = version.title
+        cell.detailTextLabel?.text = dateFormatter.string(from: version.timestamp)
 
         return cell
     }
-    */
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showVersionDetail" {
+            
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let controller = segue.destination as! DetailViewController
+                controller.detailItem = jotting
+                controller.indexForVersion = indexPath
+            }
+        }
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

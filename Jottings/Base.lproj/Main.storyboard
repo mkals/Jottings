@@ -3,8 +3,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -27,7 +27,7 @@
         <!--Detail-->
         <scene sceneID="yUG-lL-AsK">
             <objects>
-                <viewController storyboardIdentifier="detailViewController" title="Detail" id="JEX-9P-axG" customClass="DetailViewController" customModule="Jottings" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="detailViewController" title="Detail" modalPresentationStyle="currentContext" id="JEX-9P-axG" customClass="DetailViewController" customModule="Jottings" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="SYR-Wa-9uf"/>
                         <viewControllerLayoutGuide type="bottom" id="GAO-Cl-Wes"/>
@@ -36,7 +36,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Detail view content goes here" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0XM-y9-sOw">
+                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" text="Detail view content goes here" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0XM-y9-sOw">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" size="system"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -44,18 +44,31 @@
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="7ic-Fw-ole">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="edt-Rs-jLh">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="AiK-8Q-WbL"/>
+                                    <constraint firstAttribute="width" secondItem="edt-Rs-jLh" secondAttribute="height" multiplier="1:1" id="YQV-o9-3Oh"/>
+                                </constraints>
+                                <state key="normal" title="Locking" image="unlocked"/>
+                                <state key="selected" image="unlockedSelected"/>
+                                <connections>
+                                    <action selector="locking:" destination="JEX-9P-axG" eventType="touchUpInside" id="L84-rS-E0f"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="0XM-y9-sOw" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="1fe-zB-hEU"/>
+                            <constraint firstItem="0XM-y9-sOw" firstAttribute="leading" secondItem="edt-Rs-jLh" secondAttribute="trailing" constant="8" symbolic="YES" id="6iT-MT-itp"/>
                             <constraint firstItem="7ic-Fw-ole" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="8fI-Cx-emP"/>
                             <constraint firstItem="7ic-Fw-ole" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="8" symbolic="YES" id="BSB-pD-wTO"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="edt-Rs-jLh" secondAttribute="leading" id="ILp-ZL-aRJ"/>
                             <constraint firstItem="7ic-Fw-ole" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="OHi-EY-93i"/>
-                            <constraint firstItem="0XM-y9-sOw" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="c7y-br-3LP"/>
+                            <constraint firstItem="edt-Rs-jLh" firstAttribute="centerY" secondItem="0XM-y9-sOw" secondAttribute="centerY" id="UGn-Sn-zQf"/>
                             <constraint firstItem="GAO-Cl-Wes" firstAttribute="top" secondItem="0XM-y9-sOw" secondAttribute="bottom" constant="20" id="l4H-vA-tMm"/>
                             <constraint firstItem="0XM-y9-sOw" firstAttribute="top" secondItem="7ic-Fw-ole" secondAttribute="bottom" constant="8" symbolic="YES" id="vSy-IN-Bi7"/>
                         </constraints>
@@ -63,33 +76,25 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="mOI-FS-AaM">
                         <textField key="titleView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="center" minimumFontSize="17" id="k0z-gV-d64">
-                            <rect key="frame" x="90" y="7" width="150" height="30"/>
+                            <rect key="frame" x="113" y="7" width="150" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="organize" id="PCP-qu-lJH">
-                                <connections>
-                                    <action selector="versioning:" destination="JEX-9P-axG" id="Wz1-U4-dO0"/>
-                                    <segue destination="kNv-pl-019" kind="popoverPresentation" popoverAnchorBarButtonItem="PCP-qu-lJH" id="Oc5-Te-nuu">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Unlocked" id="NgI-fE-b1l">
-                                <connections>
-                                    <action selector="locking:" destination="JEX-9P-axG" id="p4H-ji-Z71"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" image="versions" id="PCP-qu-lJH">
+                            <connections>
+                                <segue destination="kNv-pl-019" kind="popoverPresentation" identifier="showVersions" popoverAnchorBarButtonItem="PCP-qu-lJH" id="Oc5-Te-nuu">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="detailBody" destination="7ic-Fw-ole" id="FDV-My-gh6"/>
                         <outlet property="detailDateCreated" destination="0XM-y9-sOw" id="xzc-Da-Hky"/>
                         <outlet property="detailTitle" destination="k0z-gV-d64" id="Vg3-IZ-hcr"/>
-                        <outlet property="lockButton" destination="NgI-fE-b1l" id="V2C-HG-dUX"/>
+                        <outlet property="lockButton" destination="edt-Rs-jLh" id="vTO-Pu-wPU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
@@ -129,7 +134,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="vC3-pB-5Vb" kind="showDetail" id="44H-Ta-7um"/>
+                                    <segue destination="JEX-9P-axG" kind="show" identifier="showVersionDetail" id="9rQ-pR-GQr"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -139,12 +144,16 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Version" id="JHh-8T-Z4T">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="1CM-8W-pCC"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="1CM-8W-pCC">
+                            <connections>
+                                <action selector="cancel:" destination="f0H-76-31j" id="Ezb-24-KUx"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V6n-Yn-n2E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2472.8000000000002" y="127.28635682158921"/>
+            <point key="canvasLocation" x="2478" y="128"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">
@@ -198,10 +207,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Master" id="Zdf-7t-Un8"/>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="j8P-mK-x3k">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>
@@ -210,7 +215,7 @@
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">
             <objects>
-                <navigationController id="vC3-pB-5Vb" sceneMemberID="viewController">
+                <navigationController modalPresentationStyle="currentContext" id="vC3-pB-5Vb" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="DjV-YW-jjY">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -226,6 +231,7 @@
         <!--Navigation Controller-->
         <scene sceneID="eTb-z7-GbV">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5ZQ-SU-02e" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kNv-pl-019" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Nyl-Id-wYf">
@@ -234,15 +240,20 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="f0H-76-31j" kind="relationship" relationship="rootViewController" id="mRE-3k-6OA"/>
+                        <segue destination="f0H-76-31j" kind="relationship" relationship="rootViewController" id="Ap4-xS-HiW"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5ZQ-SU-02e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1612" y="127.28635682158921"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="unlocked" width="21" height="28"/>
+        <image name="unlockedSelected" width="21" height="28"/>
+        <image name="versions" width="28" height="23"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="44H-Ta-7um"/>
+        <segue reference="9rQ-pR-GQr"/>
+        <segue reference="6S0-TO-JiA"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -16,7 +16,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // Do additional setup after loading the view
         self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
@@ -56,7 +57,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 // Adding new entry
                 let context = self.fetchedResultsController.managedObjectContext
                 object = Jotting(context: context)
-                object!.timestamp = NSDate()
+                object!.timestamp = Date()
             }
             
             let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
@@ -83,7 +84,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.configureCell(cell, withEvent: event)
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
