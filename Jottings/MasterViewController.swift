@@ -26,13 +26,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
             
-            if let objects = self.fetchedResultsController.fetchedObjects {
-                if objects.count > 0 {
-                    let firstIndex = IndexPath.init(row: 0, section: 0)
-                    let firstItem = self.fetchedResultsController.object(at: firstIndex)
-                    detailViewController?.detailItem = firstItem
-                }
-            }
+//            if let objects = self.fetchedResultsController.fetchedObjects {
+//                if objects.count > 0 {
+//                    let firstIndex = IndexPath.init(row: 0, section: 0)
+//                    let firstItem = self.fetchedResultsController.object(at: firstIndex)
+//                    detailViewController?.detailItem = firstItem
+//                }
+//            }
         }
     }
 
@@ -76,6 +76,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 
             } else if let indexPath = self.tableView.indexPathForSelectedRow {
                 object = self.fetchedResultsController.object(at: indexPath)
+            } else {
+                fatalError()
             }
             
             let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
@@ -115,10 +117,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
             do {
                 try context.save()
-                if let index = shiftIndexPath(indexPath: indexPath, context: context) {
-                    self.tableView.selectRow(at: index, animated: false, scrollPosition: UITableViewScrollPosition.middle)
-                }
-                self.performSegue(withIdentifier: "showDetail", sender: self)
+                self.detailViewController?.detailItem = nil
+                
+                //                if let index = shiftIndexPath(indexPath: indexPath, context: context) {
+//                    self.tableView.selectRow(at: index, animated: false, scrollPosition: UITableViewScrollPosition.middle)
+//                }
+//                self.performSegue(withIdentifier: "showDetail", sender: self)
                 
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
@@ -202,29 +206,29 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.tableView.endUpdates()
     }
 
-    func shiftIndexPath(indexPath: IndexPath, context: NSManagedObjectContext) -> IndexPath? {
-        let row = indexPath.row
-        let section = indexPath.section
-
-        if row > 0 {
-            return IndexPath.init(row: row-1, section: section)
-        }
-        
-        let rows = self.fetchedResultsController.sections![section].numberOfObjects
-        if rows > 0 {
-            return IndexPath.init(row: 0, section: section)
-        }
-        
-        for s in (section)...0 {
-            let sectionInfo = self.fetchedResultsController.sections![s]
-            let sRow = sectionInfo.numberOfObjects
-            if sRow > 0 {
-                return IndexPath.init(row: sRow, section: s)
-            }
-        }
-        
-        return nil
-    }
+//    func shiftIndexPath(indexPath: IndexPath, context: NSManagedObjectContext) -> IndexPath? {
+//        let row = indexPath.row
+//        let section = indexPath.section
+//
+//        if row > 0 {
+//            return IndexPath.init(row: row-1, section: section)
+//        }
+//        
+//        let rows = self.fetchedResultsController.sections![section].numberOfObjects
+//        if rows > 0 {
+//            return IndexPath.init(row: 0, section: section)
+//        }
+//        
+//        for s in (section)...0 {
+//            let sectionInfo = self.fetchedResultsController.sections![s]
+//            let sRow = sectionInfo.numberOfObjects
+//            if sRow > 0 {
+//                return IndexPath.init(row: sRow, section: s)
+//            }
+//        }
+//        
+//        return nil
+//    }
     
     /*
      // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.

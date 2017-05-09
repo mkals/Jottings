@@ -21,7 +21,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     var detailItem: Jotting? {
         didSet {
             // Update the view.
-          //  self.configureView()
+            self.configureView()
             
             // Update the database
             do {
