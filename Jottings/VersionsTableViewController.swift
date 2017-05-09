@@ -55,7 +55,7 @@ class VersionsTableViewController: UITableViewController {
         
         cell.textLabel?.text = version.title
         cell.detailTextLabel?.text = dateFormatter.string(from: version.timestamp)
-
+        
         return cell
     }
     

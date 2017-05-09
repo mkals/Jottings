@@ -25,11 +25,20 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            
+            if let objects = self.fetchedResultsController.fetchedObjects {
+                if objects.count > 0 {
+                    let firstIndex = IndexPath.init(row: 0, section: 0)
+                    let firstItem = self.fetchedResultsController.object(at: firstIndex)
+                    detailViewController?.detailItem = firstItem
+                }
+            }
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        self.tableView.reloadData()
         super.viewWillAppear(animated)
     }
 
@@ -54,6 +63,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 let context = self.fetchedResultsController.managedObjectContext
                 object = Jotting.init(entity: Jotting.entity(), insertInto: context)
                 object!.timestamp = Date()
+                
+                let version = Version(entity: Version.entity(), insertInto: context)
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .short
+                dateFormatter.timeStyle = .none
+                
+                version.timestamp = Date()
+                version.title = "Jotting \(dateFormatter.string(from: Date()))"
+                version.jotting = object
+                
             } else if let indexPath = self.tableView.indexPathForSelectedRow {
                 object = self.fetchedResultsController.object(at: indexPath)
             } else {
@@ -97,6 +117,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
             do {
                 try context.save()
+                self.detailViewController?.detailItem = nil
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -178,6 +199,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.tableView.endUpdates()
     }
 
+    
     /*
      // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
      

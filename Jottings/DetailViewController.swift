@@ -59,23 +59,26 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 
                 if let title = detail.versionAt(indexPath: indexForVersion).title {
                     field.text = title
+                    if detail.versions?.count == 1 {
+                        detailTitle.delegate = self
+                        detailTitle.becomeFirstResponder()
+                    }
                 } else {
                     detailTitle.delegate = self
                     detailTitle.becomeFirstResponder()
                 }
             }
-        }
-        
-        if indexForVersion != nil {
-            lockButton.isHidden = true
             
-            
-            let saveButton = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(revertToThisVersion))
-            self.navigationItem.rightBarButtonItem = saveButton
+            if indexForVersion != nil {
+                lockButton.isHidden = true
+                
+                let saveButton = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(revertToThisVersion))
+                self.navigationItem.rightBarButtonItem = saveButton
+            }
+        } else {
+            showWelcomeDisplay()
         }
     }
-
-    
     
     var lock : Bool = false {
         didSet {
@@ -102,13 +105,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        self.configureView()
-        
         // Alterts to autosave when ending editing
         NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
+        
+        self.configureView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -147,6 +148,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
             }
         }
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func showWelcomeDisplay() {
+        self.detailTitle.text = "Welcome!"
+        self.detailTitle.isUserInteractionEnabled = false
+        
+        self.navigationItem.rightBarButtonItem = nil
+        self.lockButton.isHidden = true
+        self.detailBody.isHidden = true
+        self.detailDateCreated.isHidden = true
     }
 }
 
