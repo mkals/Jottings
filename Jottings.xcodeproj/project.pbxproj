@@ -16,6 +16,11 @@
 		E90BAD061EBDADFA0044CA0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E90BAD041EBDADFA0044CA0F /* LaunchScreen.storyboard */; };
 		E90BAD111EBDADFA0044CA0F /* JottingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90BAD101EBDADFA0044CA0F /* JottingsTests.swift */; };
 		E90BAD1C1EBDADFA0044CA0F /* JottingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90BAD1B1EBDADFA0044CA0F /* JottingsUITests.swift */; };
+		E976CBAF1EBEF42A00236037 /* Jotting+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBAD1EBEF42A00236037 /* Jotting+CoreDataClass.swift */; };
+		E976CBB01EBEF42A00236037 /* Jotting+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */; };
+		E976CBB31EBEF75300236037 /* Version+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */; };
+		E976CBB41EBEF75300236037 /* Version+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */; };
+		E9EEADF21EBF075F00249925 /* VersionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +56,11 @@
 		E90BAD171EBDADFA0044CA0F /* JottingsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JottingsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E90BAD1B1EBDADFA0044CA0F /* JottingsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JottingsUITests.swift; sourceTree = "<group>"; };
 		E90BAD1D1EBDADFA0044CA0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E976CBAD1EBEF42A00236037 /* Jotting+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Jotting+CoreDataClass.swift"; path = "Core Data/Jotting+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Jotting+CoreDataProperties.swift"; path = "Core Data/Jotting+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataClass.swift"; path = "Core Data/Version+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataProperties.swift"; path = "Core Data/Version+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,10 +115,15 @@
 				E90BACFB1EBDADFA0044CA0F /* MasterViewController.swift */,
 				E90BACFD1EBDADFA0044CA0F /* DetailViewController.swift */,
 				E90BACFF1EBDADFA0044CA0F /* Main.storyboard */,
+				E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */,
 				E90BAD021EBDADFA0044CA0F /* Assets.xcassets */,
 				E90BAD041EBDADFA0044CA0F /* LaunchScreen.storyboard */,
 				E90BAD071EBDADFA0044CA0F /* Info.plist */,
 				E90BACF81EBDADFA0044CA0F /* Jottings.xcdatamodeld */,
+				E976CBAD1EBEF42A00236037 /* Jotting+CoreDataClass.swift */,
+				E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */,
+				E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */,
+				E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */,
 			);
 			path = Jottings;
 			sourceTree = "<group>";
@@ -268,10 +283,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E976CBB41EBEF75300236037 /* Version+CoreDataProperties.swift in Sources */,
+				E976CBB31EBEF75300236037 /* Version+CoreDataClass.swift in Sources */,
+				E9EEADF21EBF075F00249925 /* VersionsTableViewController.swift in Sources */,
 				E90BACF71EBDADFA0044CA0F /* AppDelegate.swift in Sources */,
 				E90BACFA1EBDADFA0044CA0F /* Jottings.xcdatamodeld in Sources */,
 				E90BACFC1EBDADFA0044CA0F /* MasterViewController.swift in Sources */,
+				E976CBB01EBEF42A00236037 /* Jotting+CoreDataProperties.swift in Sources */,
 				E90BACFE1EBDADFA0044CA0F /* DetailViewController.swift in Sources */,
+				E976CBAF1EBEF42A00236037 /* Jotting+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +542,7 @@
 				E90BAD221EBDADFA0044CA0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E90BAD231EBDADFA0044CA0F /* Build configuration list for PBXNativeTarget "JottingsTests" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +551,7 @@
 				E90BAD251EBDADFA0044CA0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E90BAD261EBDADFA0044CA0F /* Build configuration list for PBXNativeTarget "JottingsUITests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +560,7 @@
 				E90BAD281EBDADFA0044CA0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

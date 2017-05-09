@@ -14,10 +14,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // Do additional setup after loading the view
         self.navigationItem.leftBarButtonItem = self.editButtonItem
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
@@ -25,11 +25,20 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            
+//            if let objects = self.fetchedResultsController.fetchedObjects {
+//                if objects.count > 0 {
+//                    let firstIndex = IndexPath.init(row: 0, section: 0)
+//                    let firstItem = self.fetchedResultsController.object(at: firstIndex)
+//                    detailViewController?.detailItem = firstItem
+//                }
+//            }
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        self.tableView.reloadData()
         super.viewWillAppear(animated)
     }
 
@@ -39,37 +48,45 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func insertNewObject(_ sender: Any) {
-        let context = self.fetchedResultsController.managedObjectContext
-        let newEvent = Event(context: context)
-             
-        // If appropriate, configure the new managed object.
-        newEvent.timestamp = NSDate()
-
-        // Save the context.
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
+        self.performSegue(withIdentifier: "showDetail", sender: "insertNew")
     }
-
+    
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-            let object = self.fetchedResultsController.object(at: indexPath)
-                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
-                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton = true
+            
+            var object : Jotting?
+            
+            if sender as? String == "insertNew" {
+                // Adding new entry
+                let context = self.fetchedResultsController.managedObjectContext
+                object = Jotting.init(entity: Jotting.entity(), insertInto: context)
+                object!.timestamp = Date()
+                
+                let version = Version(entity: Version.entity(), insertInto: context)
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .short
+                dateFormatter.timeStyle = .none
+                
+                version.timestamp = Date()
+                version.title = "Jotting \(dateFormatter.string(from: Date()))"
+                version.jotting = object
+                
+            } else if let indexPath = self.tableView.indexPathForSelectedRow {
+                object = self.fetchedResultsController.object(at: indexPath)
+            } else {
+                fatalError()
             }
+            
+            let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+            controller.detailItem = object
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+            controller.navigationItem.leftItemsSupplementBackButton = true
         }
     }
-
+    
     // MARK: - Table View
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -87,7 +104,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.configureCell(cell, withEvent: event)
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
@@ -97,9 +114,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if editingStyle == .delete {
             let context = self.fetchedResultsController.managedObjectContext
             context.delete(self.fetchedResultsController.object(at: indexPath))
-                
+
             do {
                 try context.save()
+                self.detailViewController?.detailItem = nil
+                
+                //                if let index = shiftIndexPath(indexPath: indexPath, context: context) {
+//                    self.tableView.selectRow(at: index, animated: false, scrollPosition: UITableViewScrollPosition.middle)
+//                }
+//                self.performSegue(withIdentifier: "showDetail", sender: self)
+                
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -109,18 +133,18 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
 
-    func configureCell(_ cell: UITableViewCell, withEvent event: Event) {
-        cell.textLabel!.text = event.timestamp!.description
+    func configureCell(_ cell: UITableViewCell, withEvent jotting: Jotting) {
+        cell.textLabel!.text = jotting.current?.title //event.timestamp!.description
     }
 
-    // MARK: - Fetched results controller
+    // MARK: - Fetched results controlleres
 
-    var fetchedResultsController: NSFetchedResultsController<Event> {
+    var fetchedResultsController: NSFetchedResultsController<Jotting> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
         }
         
-        let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
+        let fetchRequest: NSFetchRequest<Jotting> = Jotting.fetchRequest()
         
         // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = 20
@@ -146,13 +170,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         return _fetchedResultsController!
-    }    
-    var _fetchedResultsController: NSFetchedResultsController<Event>? = nil
+    }
+    
+    var _fetchedResultsController: NSFetchedResultsController<Jotting>? = nil
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
-
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
             case .insert:
@@ -171,7 +196,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             case .delete:
                 tableView.deleteRows(at: [indexPath!], with: .fade)
             case .update:
-                self.configureCell(tableView.cellForRow(at: indexPath!)!, withEvent: anObject as! Event)
+                self.configureCell(tableView.cellForRow(at: indexPath!)!, withEvent: anObject as! Jotting)
             case .move:
                 tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
@@ -181,6 +206,30 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.tableView.endUpdates()
     }
 
+//    func shiftIndexPath(indexPath: IndexPath, context: NSManagedObjectContext) -> IndexPath? {
+//        let row = indexPath.row
+//        let section = indexPath.section
+//
+//        if row > 0 {
+//            return IndexPath.init(row: row-1, section: section)
+//        }
+//        
+//        let rows = self.fetchedResultsController.sections![section].numberOfObjects
+//        if rows > 0 {
+//            return IndexPath.init(row: 0, section: section)
+//        }
+//        
+//        for s in (section)...0 {
+//            let sectionInfo = self.fetchedResultsController.sections![s]
+//            let sRow = sectionInfo.numberOfObjects
+//            if sRow > 0 {
+//                return IndexPath.init(row: sRow, section: s)
+//            }
+//        }
+//        
+//        return nil
+//    }
+    
     /*
      // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
      
