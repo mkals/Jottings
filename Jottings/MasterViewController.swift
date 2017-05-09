@@ -76,8 +76,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 
             } else if let indexPath = self.tableView.indexPathForSelectedRow {
                 object = self.fetchedResultsController.object(at: indexPath)
-            } else {
-                fatalError()
             }
             
             let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
@@ -117,7 +115,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
             do {
                 try context.save()
-                self.detailViewController?.detailItem = nil
+                if let index = shiftIndexPath(indexPath: indexPath, context: context) {
+                    self.tableView.selectRow(at: index, animated: false, scrollPosition: UITableViewScrollPosition.middle)
+                }
+                self.performSegue(withIdentifier: "showDetail", sender: self)
+                
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -164,13 +166,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         return _fetchedResultsController!
-    }    
+    }
+    
     var _fetchedResultsController: NSFetchedResultsController<Jotting>? = nil
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
-
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
             case .insert:
@@ -199,6 +202,29 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.tableView.endUpdates()
     }
 
+    func shiftIndexPath(indexPath: IndexPath, context: NSManagedObjectContext) -> IndexPath? {
+        let row = indexPath.row
+        let section = indexPath.section
+
+        if row > 0 {
+            return IndexPath.init(row: row-1, section: section)
+        }
+        
+        let rows = self.fetchedResultsController.sections![section].numberOfObjects
+        if rows > 0 {
+            return IndexPath.init(row: 0, section: section)
+        }
+        
+        for s in (section)...0 {
+            let sectionInfo = self.fetchedResultsController.sections![s]
+            let sRow = sectionInfo.numberOfObjects
+            if sRow > 0 {
+                return IndexPath.init(row: sRow, section: s)
+            }
+        }
+        
+        return nil
+    }
     
     /*
      // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.

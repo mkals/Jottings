@@ -21,7 +21,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     var detailItem: Jotting? {
         didSet {
             // Update the view.
-            self.configureView()
+          //  self.configureView()
             
             // Update the database
             do {
@@ -38,7 +38,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         }
     }
 
-    func configureView() {
+    private func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem  {
             
@@ -150,7 +150,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         self.dismiss(animated: true, completion: nil)
     }
     
-    func showWelcomeDisplay() {
+    private func showWelcomeDisplay() {
         self.detailTitle.text = "Welcome!"
         self.detailTitle.isUserInteractionEnabled = false
         
