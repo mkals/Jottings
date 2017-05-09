@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
-class VersionsTableViewController: UITableViewController {
+class VersionsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
     var jotting : Jotting?
+    
+    var context : NSManagedObjectContext? {
+        get {
+            return jotting?.managedObjectContext
+        }
+    }
     
     var orderedVersions : Array<Array<Version>> {
         if let object = jotting {
@@ -45,8 +52,9 @@ class VersionsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
+        
         let version = orderedVersions[indexPath.section][indexPath.row]
         
         let dateFormatter = DateFormatter()
@@ -57,6 +65,15 @@ class VersionsTableViewController: UITableViewController {
         cell.detailTextLabel?.text = dateFormatter.string(from: version.timestamp)
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        
+        let date = orderedVersions[section][0].timestamp
+        return dateFormatter.string(from: date)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -78,11 +95,30 @@ class VersionsTableViewController: UITableViewController {
     }
     */
 
-    // Override to support editing the table view.
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            let object = orderedVersions[indexPath.section][indexPath.row]
+            context?.delete(object)
+            
+            do {
+                try context?.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+            
+            self.tableView.reloadData()
         }
     }
+    
+    
+//    // Override to support editing the table view.
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            // Delete the row from the data source
+//
+//        }
+//    }
 }

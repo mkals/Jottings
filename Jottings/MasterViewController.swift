@@ -25,14 +25,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-            
-//            if let objects = self.fetchedResultsController.fetchedObjects {
-//                if objects.count > 0 {
-//                    let firstIndex = IndexPath.init(row: 0, section: 0)
-//                    let firstItem = self.fetchedResultsController.object(at: firstIndex)
-//                    detailViewController?.detailItem = firstItem
-//                }
-//            }
         }
     }
 
@@ -114,19 +106,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if editingStyle == .delete {
             let context = self.fetchedResultsController.managedObjectContext
             context.delete(self.fetchedResultsController.object(at: indexPath))
-
             do {
                 try context.save()
                 self.detailViewController?.detailItem = nil
-                
-                //                if let index = shiftIndexPath(indexPath: indexPath, context: context) {
-//                    self.tableView.selectRow(at: index, animated: false, scrollPosition: UITableViewScrollPosition.middle)
-//                }
-//                self.performSegue(withIdentifier: "showDetail", sender: self)
-                
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
@@ -206,29 +189,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.tableView.endUpdates()
     }
 
-//    func shiftIndexPath(indexPath: IndexPath, context: NSManagedObjectContext) -> IndexPath? {
-//        let row = indexPath.row
-//        let section = indexPath.section
-//
-//        if row > 0 {
-//            return IndexPath.init(row: row-1, section: section)
-//        }
-//        
-//        let rows = self.fetchedResultsController.sections![section].numberOfObjects
-//        if rows > 0 {
-//            return IndexPath.init(row: 0, section: section)
-//        }
-//        
-//        for s in (section)...0 {
-//            let sectionInfo = self.fetchedResultsController.sections![s]
-//            let sRow = sectionInfo.numberOfObjects
-//            if sRow > 0 {
-//                return IndexPath.init(row: sRow, section: s)
-//            }
-//        }
-//        
-//        return nil
-//    }
     
     /*
      // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.

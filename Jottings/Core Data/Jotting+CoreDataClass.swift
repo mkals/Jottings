@@ -21,9 +21,7 @@ public class Jotting: NSManagedObject {
     var versionsArray : Array<Version> {
         get {
             if let verSet = self.versions {
-                var ver = verSet.allObjects as! [Version]
-                ver.sort(by: {$0.timestamp < $1.timestamp})
-                return ver
+                return verSet.sorted(by: {$0.timestamp < $1.timestamp})
             }
             return Array<Version>()
         }

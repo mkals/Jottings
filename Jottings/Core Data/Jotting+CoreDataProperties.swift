@@ -17,7 +17,7 @@ extension Jotting {
     }
     
     @NSManaged public var timestamp: Date
-    @NSManaged public var versions: NSSet?
+    @NSManaged public var versions: Set<Version>?
 
 }
 
@@ -31,9 +31,9 @@ extension Jotting {
     @NSManaged public func removeFromVersions(_ value: Version)
 
     @objc(addVersions:)
-    @NSManaged public func addToVersions(_ values: NSSet)
+    @NSManaged public func addToVersions(_ values: Set<Version>)
 
     @objc(removeVersions:)
-    @NSManaged public func removeFromVersions(_ values: NSSet)
+    @NSManaged public func removeFromVersions(_ values: Set<Version>)
 
 }
