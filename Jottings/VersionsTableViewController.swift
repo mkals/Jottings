@@ -98,15 +98,21 @@ class VersionsTableViewController: UITableViewController, NSFetchedResultsContro
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
-            let object = orderedVersions[indexPath.section][indexPath.row]
-            context?.delete(object)
-            
-            do {
-                try context?.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            if (jotting?.versionsArray.count)! > 1 {
+                let object = orderedVersions[indexPath.section][indexPath.row]
+                context?.delete(object)
+                
+                do {
+                    try context?.save()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+            } else {
+                // alert user
+                let alert = UIAlertController(title: "Cannot delete version", message: "There is only one version left.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction.init(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
             
             self.tableView.reloadData()

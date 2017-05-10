@@ -16,6 +16,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     
     @IBOutlet weak var lockButton: UIButton!
     
+    @IBOutlet weak var bottomHeight: NSLayoutConstraint!
+    
     var indexForVersion : IndexPath?
     
     var detailItem: Jotting? {
@@ -29,7 +31,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
             } catch {
                 // alert user
                 let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have coppied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
                 let nserror = error as NSError
@@ -41,6 +43,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     private func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem  {
+            
+            
             
             if let field = detailDateCreated {
                 
@@ -71,9 +75,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
             
             if indexForVersion != nil {
                 lockButton.isHidden = true
+                detailTitle.isEnabled = false
+                detailBody.isEditable = false
                 
-                let saveButton = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(revertToThisVersion))
-                self.navigationItem.rightBarButtonItem = saveButton
+                let restoreButton = UIBarButtonItem.init(title: "Restore", style: .plain, target: self, action: #selector(revertToThisVersion))
+                self.navigationItem.rightBarButtonItem = restoreButton
             }
         } else {
             showWelcomeDisplay()
@@ -104,14 +110,44 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.configureView()
+
         // Alterts to autosave when ending editing
         NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
         
-        self.configureView()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
+
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillMove(notification: NSNotification) {
+        let userInfo = notification.userInfo!
+            
+        let animationDuration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let convertedKeyboardEndFrame = view.convert(keyboardEndFrame, from: view.window)
+        let rawAnimationCurve = (notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).uint32Value << 16
+        let animationCurve = UIViewAnimationOptions.init(rawValue: UInt(rawAnimationCurve))
+        
+        bottomHeight.constant = view.bounds.maxY - convertedKeyboardEndFrame.minY
+        
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: [.beginFromCurrentState, animationCurve], animations: { self.view.layoutIfNeeded() }, completion: nil)
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
