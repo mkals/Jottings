@@ -16,6 +16,8 @@ extension Jotting {
         return NSFetchRequest<Jotting>(entityName: "Jotting");
     }
     
+    @NSManaged public var author: String
+    @NSManaged public var locked: Bool
     @NSManaged public var timestamp: Date
     @NSManaged public var versions: Set<Version>?
 

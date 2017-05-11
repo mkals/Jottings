@@ -44,8 +44,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         // Update the user interface for the detail item.
         if let detail = self.detailItem  {
             
-            
-            
             if let field = detailDateCreated {
                 
                 let dateFormatter = DateFormatter()
@@ -63,13 +61,14 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 
                 if let title = detail.versionAt(indexPath: indexForVersion).title {
                     field.text = title
+                    
                     if detail.versions?.count == 1 {
-                        detailTitle.delegate = self
-                        detailTitle.becomeFirstResponder()
+                        //detailTitle.delegate = self
+                        //detailTitle.becomeFirstResponder()
                     }
                 } else {
-                    detailTitle.delegate = self
-                    detailTitle.becomeFirstResponder()
+                    //detailTitle.delegate = self
+                    //detailTitle.becomeFirstResponder()
                 }
             }
             
@@ -81,14 +80,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 let restoreButton = UIBarButtonItem.init(title: "Restore", style: .plain, target: self, action: #selector(revertToThisVersion))
                 self.navigationItem.rightBarButtonItem = restoreButton
             }
+            
+            // Configure lock button
+            if lockButton != nil {
+                locked = detail.locked
+            }
+
         } else {
             showWelcomeDisplay()
         }
     }
     
-    var lock : Bool = false {
+    var locked : Bool = false {
         didSet {
-            if lock {
+            //Update UI to reflext new locked state
+            if locked {
                 lockButton.setImage(UIImage.init(named: "locked"), for: .normal)
                 lockButton.setImage(UIImage.init(named: "lockedSelected"), for: .selected)
                 
@@ -101,11 +107,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 self.detailTitle.isEnabled = true
                 self.detailBody.isEditable = true
             }
+            
+            // save locked state
+            detailItem?.locked = locked
+            save()
         }
     }
     
     @IBAction func locking(_ sender: AnyObject) {
-        lock = !lock
+        locked = !locked
     }
     
     override func viewDidLoad() {
@@ -114,14 +124,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.configureView()
 
         // Alterts to autosave when ending editing
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        self.configureView()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -153,6 +164,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         // Dispose of any resources that can be recreated.
     }
     
+    
+    /*!
+     * @discussion Function to save current detail item at appropirate time intervals to ensure power efficiency and limit the possibility of data loss.
+     */
     func save() {
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {
@@ -172,6 +187,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         }
     }
     
+    /*!
+     * @discussion Reverts to current version by copying its state to a new version with the current time stamp.
+     */
     func revertToThisVersion() {
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {

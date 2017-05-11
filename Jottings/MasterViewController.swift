@@ -55,6 +55,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 let context = self.fetchedResultsController.managedObjectContext
                 object = Jotting.init(entity: Jotting.entity(), insertInto: context)
                 object!.timestamp = Date()
+                object!.locked = false
                 
                 let version = Version(entity: Version.entity(), insertInto: context)
                 
