@@ -30,7 +30,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 try self.detailItem?.managedObjectContext?.save()
             } catch {
                 // alert user
-                let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have coppied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have copied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
@@ -61,14 +61,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 
                 if let title = detail.versionAt(indexPath: indexForVersion).title {
                     field.text = title
-                    
-                    if detail.versions?.count == 1 {
-                        //detailTitle.delegate = self
-                        //detailTitle.becomeFirstResponder()
-                    }
-                } else {
-                    //detailTitle.delegate = self
-                    //detailTitle.becomeFirstResponder()
                 }
             }
             
@@ -168,6 +160,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     /*!
      * @discussion Function to save current detail item at appropirate time intervals to ensure power efficiency and limit the possibility of data loss.
      */
+
+    var needsSave: Bool = false {
+        didSet {
+            if !needsSave {
+                let timer = Timer.init(timeInterval: TimeInterval.init(30), target: self, selector: #selector(save), userInfo: nil, repeats: false)
+                timer.invalidate()
+            }
+        }
+    }
+
     func save() {
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {
@@ -208,10 +210,25 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         self.detailTitle.text = "Welcome!"
         self.detailTitle.isUserInteractionEnabled = false
         
-        self.navigationItem.rightBarButtonItem = nil
-        self.lockButton.isHidden = true
-        self.detailBody.isHidden = true
-        self.detailDateCreated.isHidden = true
+        if self.navigationItem.rightBarButtonItem != nil {
+            self.navigationItem.rightBarButtonItem = nil;
+        }
+        
+        if self.navigationItem.rightBarButtonItem != nil {
+            self.navigationItem.rightBarButtonItem = nil
+        }
+        
+        if let button = self.lockButton {
+            button.isHidden = true
+        }
+        
+        if let body = self.detailBody {
+            body.isHidden = true
+        }
+        
+        if let date = self.detailDateCreated {
+            date.isHidden = true
+        }
     }
 }
 
