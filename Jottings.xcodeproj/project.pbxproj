@@ -60,6 +60,7 @@
 		E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Jotting+CoreDataProperties.swift"; path = "Core Data/Jotting+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataClass.swift"; path = "Core Data/Version+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataProperties.swift"; path = "Core Data/Version+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E9D48B8F1EC729D6000F23C6 /* Jottings.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Jottings.entitlements; sourceTree = "<group>"; };
 		E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,12 +119,13 @@
 				E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */,
 				E90BAD021EBDADFA0044CA0F /* Assets.xcassets */,
 				E90BAD041EBDADFA0044CA0F /* LaunchScreen.storyboard */,
-				E90BAD071EBDADFA0044CA0F /* Info.plist */,
 				E90BACF81EBDADFA0044CA0F /* Jottings.xcdatamodeld */,
 				E976CBAD1EBEF42A00236037 /* Jotting+CoreDataClass.swift */,
 				E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */,
 				E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */,
 				E976CBB21EBEF75300236037 /* Version+CoreDataProperties.swift */,
+				E90BAD071EBDADFA0044CA0F /* Info.plist */,
+				E9D48B8F1EC729D6000F23C6 /* Jottings.entitlements */,
 			);
 			path = Jottings;
 			sourceTree = "<group>";
@@ -216,6 +218,11 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = RWW37L6WF8;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					E90BAD0B1EBDADFA0044CA0F = {
 						CreatedOnToolsVersion = 8.0;
@@ -443,6 +450,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Jottings/Jottings.entitlements;
 				DEVELOPMENT_TEAM = RWW37L6WF8;
 				INFOPLIST_FILE = Jottings/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -456,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Jottings/Jottings.entitlements;
 				DEVELOPMENT_TEAM = RWW37L6WF8;
 				INFOPLIST_FILE = Jottings/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
