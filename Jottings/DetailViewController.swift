@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
+class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var detailDateCreated: UILabel!
     @IBOutlet weak var detailBody: UITextView!
@@ -55,6 +55,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 if let title = detail.versionAt(indexPath: indexForVersion).title {
                     field.text = title
                 }
+                setTitleWidth()
             }
             
             if indexForVersion != nil {
@@ -73,7 +74,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         }
     }
     
-    
+    func setTitleWidth() {
+        if let field = detailTitle {
+            let width = self.view.bounds.width - 50
+            field.bounds = CGRect.init(x: field.bounds.minX, y: field.bounds.minY, width: width, height: field.bounds.height)
+        }
+    }
     
     var locked : Bool = false {
         didSet {
@@ -111,6 +117,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.detailTitle.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +129,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setTitleWidth), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         self.configureView()
     }
@@ -160,6 +169,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         // Dispose of any resources that can be recreated.
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.detailBody.delegate = self
+        self.detailBody.becomeFirstResponder()
+        return false
+    }
     
     /*!
      * @discussion Function to save current detail item at appropirate time intervals to ensure power efficiency and limit the possibility of data loss.

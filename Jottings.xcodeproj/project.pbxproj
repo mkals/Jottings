@@ -16,6 +16,8 @@
 		E90BAD061EBDADFA0044CA0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E90BAD041EBDADFA0044CA0F /* LaunchScreen.storyboard */; };
 		E90BAD111EBDADFA0044CA0F /* JottingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90BAD101EBDADFA0044CA0F /* JottingsTests.swift */; };
 		E90BAD1C1EBDADFA0044CA0F /* JottingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90BAD1B1EBDADFA0044CA0F /* JottingsUITests.swift */; };
+		E9123AC61EC74A03001F02EC /* VersionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9123AC51EC74A03001F02EC /* VersionsTableViewCell.swift */; };
+		E95E57911EC7A5F4005F2607 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E95E57901EC7A5F4005F2607 /* CloudKit.framework */; };
 		E976CBAF1EBEF42A00236037 /* Jotting+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBAD1EBEF42A00236037 /* Jotting+CoreDataClass.swift */; };
 		E976CBB01EBEF42A00236037 /* Jotting+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */; };
 		E976CBB31EBEF75300236037 /* Version+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */; };
@@ -56,6 +58,8 @@
 		E90BAD171EBDADFA0044CA0F /* JottingsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JottingsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E90BAD1B1EBDADFA0044CA0F /* JottingsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JottingsUITests.swift; sourceTree = "<group>"; };
 		E90BAD1D1EBDADFA0044CA0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9123AC51EC74A03001F02EC /* VersionsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionsTableViewCell.swift; sourceTree = "<group>"; };
+		E95E57901EC7A5F4005F2607 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		E976CBAD1EBEF42A00236037 /* Jotting+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Jotting+CoreDataClass.swift"; path = "Core Data/Jotting+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E976CBAE1EBEF42A00236037 /* Jotting+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Jotting+CoreDataProperties.swift"; path = "Core Data/Jotting+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E976CBB11EBEF75300236037 /* Version+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Version+CoreDataClass.swift"; path = "Core Data/Version+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -69,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E95E57911EC7A5F4005F2607 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +101,7 @@
 				E90BAD0F1EBDADFA0044CA0F /* JottingsTests */,
 				E90BAD1A1EBDADFA0044CA0F /* JottingsUITests */,
 				E90BACF41EBDADFA0044CA0F /* Products */,
+				E95E578F1EC7A5F4005F2607 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -117,6 +123,7 @@
 				E90BACFD1EBDADFA0044CA0F /* DetailViewController.swift */,
 				E90BACFF1EBDADFA0044CA0F /* Main.storyboard */,
 				E9EEADF11EBF075F00249925 /* VersionsTableViewController.swift */,
+				E9123AC51EC74A03001F02EC /* VersionsTableViewCell.swift */,
 				E90BAD021EBDADFA0044CA0F /* Assets.xcassets */,
 				E90BAD041EBDADFA0044CA0F /* LaunchScreen.storyboard */,
 				E90BACF81EBDADFA0044CA0F /* Jottings.xcdatamodeld */,
@@ -146,6 +153,14 @@
 				E90BAD1D1EBDADFA0044CA0F /* Info.plist */,
 			);
 			path = JottingsUITests;
+			sourceTree = "<group>";
+		};
+		E95E578F1EC7A5F4005F2607 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E95E57901EC7A5F4005F2607 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +234,9 @@
 						DevelopmentTeam = RWW37L6WF8;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 0;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -295,6 +313,7 @@
 				E9EEADF21EBF075F00249925 /* VersionsTableViewController.swift in Sources */,
 				E90BACF71EBDADFA0044CA0F /* AppDelegate.swift in Sources */,
 				E90BACFA1EBDADFA0044CA0F /* Jottings.xcdatamodeld in Sources */,
+				E9123AC61EC74A03001F02EC /* VersionsTableViewCell.swift in Sources */,
 				E90BACFC1EBDADFA0044CA0F /* MasterViewController.swift in Sources */,
 				E976CBB01EBEF42A00236037 /* Jotting+CoreDataProperties.swift in Sources */,
 				E90BACFE1EBDADFA0044CA0F /* DetailViewController.swift in Sources */,

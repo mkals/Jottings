@@ -13,6 +13,9 @@ class VersionsTableViewController: UITableViewController, NSFetchedResultsContro
     
     var jotting : Jotting?
     
+    @IBOutlet weak var titleField: UILabel!
+    @IBOutlet weak var detailField: UILabel!
+    
     var context : NSManagedObjectContext? {
         get {
             return jotting?.managedObjectContext
@@ -34,6 +37,8 @@ class VersionsTableViewController: UITableViewController, NSFetchedResultsContro
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,10 +55,10 @@ class VersionsTableViewController: UITableViewController, NSFetchedResultsContro
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return orderedVersions[section].count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "VersionsCell", for: indexPath) as! VersionsTableViewCell
         
         let version = orderedVersions[indexPath.section][indexPath.row]
         
@@ -61,8 +66,13 @@ class VersionsTableViewController: UITableViewController, NSFetchedResultsContro
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .medium
         
-        cell.textLabel?.text = version.title
-        cell.detailTextLabel?.text = dateFormatter.string(from: version.timestamp)
+        if let field = cell.titleField {
+            field.text = version.title
+        }
+        
+        if let field = cell.detailField {
+            field.text = dateFormatter.string(from: version.timestamp)
+        }
         
         return cell
     }
