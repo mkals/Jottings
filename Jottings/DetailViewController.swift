@@ -18,28 +18,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
-    var indexForVersion : IndexPath?
+    var indexForVersion: IndexPath?
+    var detailItem: Jotting?
     
-    var detailItem: Jotting? {
+    var saveTimer: Timer = Timer.init()
+    var needsSave: Bool = false {
         didSet {
-            // Update the view.
-            self.configureView()
-            
-            // Update the database
-            do {
-                try self.detailItem?.managedObjectContext?.save()
-            } catch {
-                // alert user
-                let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have copied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)") // TODO: remove before deploy
+            if needsSave == true && !saveTimer.isValid {
+                saveTimer = Timer.scheduledTimer(timeInterval: TimeInterval.init(3), target: self, selector: #selector(save), userInfo: nil, repeats: false)
+            }
+            if needsSave == false {
+                saveTimer.invalidate()
             }
         }
     }
-
+    
     private func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem  {
@@ -65,16 +58,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
             }
             
             if indexForVersion != nil {
-                lockButton.isHidden = true
-                detailTitle.isEnabled = false
-                detailBody.isEditable = false
+                self.detailTitle.isEnabled = false
+                self.detailBody.isEditable = false
+                self.lockButton.isHidden = true
                 
                 let restoreButton = UIBarButtonItem.init(title: "Restore", style: .plain, target: self, action: #selector(revertToThisVersion))
                 self.navigationItem.rightBarButtonItem = restoreButton
-            }
-            
-            // Configure lock button
-            if lockButton != nil {
+            } else if lockButton != nil {
                 locked = detail.locked
             }
 
@@ -83,15 +73,24 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         }
     }
     
+    
+    
     var locked : Bool = false {
         didSet {
             //Update UI to reflext new locked state
+            if indexForVersion != nil {
+                return
+            }
+            
             if locked {
                 lockButton.setImage(UIImage.init(named: "locked"), for: .normal)
                 lockButton.setImage(UIImage.init(named: "lockedSelected"), for: .selected)
                 
                 self.detailTitle.isEnabled = false
                 self.detailBody.isEditable = false
+                
+                save()
+                
             } else {
                 lockButton.setImage(UIImage.init(named: "unlocked"), for: .normal)
                 lockButton.setImage(UIImage.init(named: "unlockedSelected"), for: .selected)
@@ -99,15 +98,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 self.detailTitle.isEnabled = true
                 self.detailBody.isEditable = true
             }
-            
-            // save locked state
-            detailItem?.locked = locked
-            save()
         }
     }
     
     @IBAction func locking(_ sender: AnyObject) {
         locked = !locked
+        
+        // save locked state
+        detailItem?.locked = locked
+        needsSave = true
     }
     
     override func viewDidLoad() {
@@ -118,8 +117,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         super.viewWillAppear(animated)
 
         // Alterts to autosave when ending editing
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(textEditingOccured), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(textEditingOccured), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -134,6 +133,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
 
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        save()
     }
     
     func keyboardWillMove(notification: NSNotification) {
@@ -150,6 +151,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         UIView.animate(withDuration: animationDuration, delay: 0.0, options: [.beginFromCurrentState, animationCurve], animations: { self.view.layoutIfNeeded() }, completion: nil)
     }
     
+    func textEditingOccured() {
+        needsSave = true
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -160,17 +164,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     /*!
      * @discussion Function to save current detail item at appropirate time intervals to ensure power efficiency and limit the possibility of data loss.
      */
-
-    var needsSave: Bool = false {
-        didSet {
-            if !needsSave {
-                let timer = Timer.init(timeInterval: TimeInterval.init(30), target: self, selector: #selector(save), userInfo: nil, repeats: false)
-                timer.invalidate()
-            }
-        }
-    }
-
     func save() {
+        if !needsSave {
+            return
+        }
+        
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {
                 let newVersion = Version(context: context)
@@ -178,6 +176,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 newVersion.timestamp = Date()
                 newVersion.body = detailBody.text
                 newVersion.title = detailTitle.text
+                
+                // Update the database
+                do {
+                    try context.save()
+                    needsSave = false
+                    detailItem?.cleanVesions()
+                } catch {
+                    // alert user
+                    let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have copied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)") // TODO: remove before deploy
+                }
             }
         }
     }
@@ -187,6 +200,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
             let controller = (segue.destination as! UINavigationController).topViewController as! VersionsTableViewController
             controller.jotting = detailItem
         }
+        save()
     }
     
     /*!

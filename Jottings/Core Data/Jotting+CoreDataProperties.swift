@@ -20,7 +20,7 @@ extension Jotting {
     @NSManaged public var locked: Bool
     @NSManaged public var timestamp: Date
     @NSManaged public var versions: Set<Version>?
-
+    
 }
 
 // MARK: Generated accessors for versions
