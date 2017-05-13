@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Jotting" representedClassName=".Jotting">
+        <attribute name="author" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locked" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="versions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Version" inverseName="jotting" inverseEntity="Version" syncable="YES"/>
         <userInfo/>
@@ -12,7 +14,7 @@
         <relationship name="jotting" maxCount="1" deletionRule="Nullify" destinationEntity="Jotting" inverseName="versions" inverseEntity="Jotting" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Jotting" positionX="261" positionY="189" width="128" height="75"/>
+        <element name="Jotting" positionX="261" positionY="189" width="128" height="105"/>
         <element name="Version" positionX="450" positionY="191" width="128" height="105"/>
     </elements>
 </model>

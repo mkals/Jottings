@@ -16,28 +16,23 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     
     @IBOutlet weak var lockButton: UIButton!
     
-    var indexForVersion : IndexPath?
+    @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
-    var detailItem: Jotting? {
+    var indexForVersion: IndexPath?
+    var detailItem: Jotting?
+    
+    var saveTimer: Timer = Timer.init()
+    var needsSave: Bool = false {
         didSet {
-            // Update the view.
-            self.configureView()
-            
-            // Update the database
-            do {
-                try self.detailItem?.managedObjectContext?.save()
-            } catch {
-                // alert user
-                let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have coppied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)") // TODO: remove before deploy
+            if needsSave == true && !saveTimer.isValid {
+                saveTimer = Timer.scheduledTimer(timeInterval: TimeInterval.init(3), target: self, selector: #selector(save), userInfo: nil, repeats: false)
+            }
+            if needsSave == false {
+                saveTimer.invalidate()
             }
         }
     }
-
+    
     private func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem  {
@@ -59,35 +54,43 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 
                 if let title = detail.versionAt(indexPath: indexForVersion).title {
                     field.text = title
-                    if detail.versions?.count == 1 {
-                        detailTitle.delegate = self
-                        detailTitle.becomeFirstResponder()
-                    }
-                } else {
-                    detailTitle.delegate = self
-                    detailTitle.becomeFirstResponder()
                 }
             }
             
             if indexForVersion != nil {
-                lockButton.isHidden = true
+                self.detailTitle.isEnabled = false
+                self.detailBody.isEditable = false
+                self.lockButton.isHidden = true
                 
-                let saveButton = UIBarButtonItem.init(barButtonSystemItem: .save, target: self, action: #selector(revertToThisVersion))
-                self.navigationItem.rightBarButtonItem = saveButton
+                let restoreButton = UIBarButtonItem.init(title: "Restore", style: .plain, target: self, action: #selector(revertToThisVersion))
+                self.navigationItem.rightBarButtonItem = restoreButton
+            } else if lockButton != nil {
+                locked = detail.locked
             }
+
         } else {
             showWelcomeDisplay()
         }
     }
     
-    var lock : Bool = false {
+    
+    
+    var locked : Bool = false {
         didSet {
-            if lock {
+            //Update UI to reflext new locked state
+            if indexForVersion != nil {
+                return
+            }
+            
+            if locked {
                 lockButton.setImage(UIImage.init(named: "locked"), for: .normal)
                 lockButton.setImage(UIImage.init(named: "lockedSelected"), for: .selected)
                 
                 self.detailTitle.isEnabled = false
                 self.detailBody.isEditable = false
+                
+                save()
+                
             } else {
                 lockButton.setImage(UIImage.init(named: "unlocked"), for: .normal)
                 lockButton.setImage(UIImage.init(named: "unlockedSelected"), for: .selected)
@@ -99,25 +102,73 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
     }
     
     @IBAction func locking(_ sender: AnyObject) {
-        lock = !lock
+        locked = !locked
+        
+        // save locked state
+        detailItem?.locked = locked
+        needsSave = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         // Alterts to autosave when ending editing
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(save), name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(textEditingOccured), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(textEditingOccured), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillMove), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         self.configureView()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UITextViewTextDidEndEditing, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UITextFieldTextDidEndEditing, object: nil)
+
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        save()
+    }
+    
+    func keyboardWillMove(notification: NSNotification) {
+        let userInfo = notification.userInfo!
+            
+        let animationDuration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let convertedKeyboardEndFrame = view.convert(keyboardEndFrame, from: view.window)
+        let rawAnimationCurve = (notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).uint32Value << 16
+        let animationCurve = UIViewAnimationOptions.init(rawValue: UInt(rawAnimationCurve))
+        
+        bottomHeight.constant = view.bounds.maxY - convertedKeyboardEndFrame.minY
+        
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: [.beginFromCurrentState, animationCurve], animations: { self.view.layoutIfNeeded() }, completion: nil)
+    }
+    
+    func textEditingOccured() {
+        needsSave = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
+    /*!
+     * @discussion Function to save current detail item at appropirate time intervals to ensure power efficiency and limit the possibility of data loss.
+     */
     func save() {
+        if !needsSave {
+            return
+        }
+        
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {
                 let newVersion = Version(context: context)
@@ -125,6 +176,21 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
                 newVersion.timestamp = Date()
                 newVersion.body = detailBody.text
                 newVersion.title = detailTitle.text
+                
+                // Update the database
+                do {
+                    try context.save()
+                    needsSave = false
+                    detailItem?.cleanVesions()
+                } catch {
+                    // alert user
+                    let alert = UIAlertController(title: "Warning", message: "We can not save your data for some reason. Do not exit the application before you have copied the new inforation you have inserted since you started editing this text field. ", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)") // TODO: remove before deploy
+                }
             }
         }
     }
@@ -134,8 +200,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
             let controller = (segue.destination as! UINavigationController).topViewController as! VersionsTableViewController
             controller.jotting = detailItem
         }
+        save()
     }
     
+    /*!
+     * @discussion Reverts to current version by copying its state to a new version with the current time stamp.
+     */
     func revertToThisVersion() {
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {
@@ -154,10 +224,25 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIPopoverPres
         self.detailTitle.text = "Welcome!"
         self.detailTitle.isUserInteractionEnabled = false
         
-        self.navigationItem.rightBarButtonItem = nil
-        self.lockButton.isHidden = true
-        self.detailBody.isHidden = true
-        self.detailDateCreated.isHidden = true
+        if self.navigationItem.rightBarButtonItem != nil {
+            self.navigationItem.rightBarButtonItem = nil;
+        }
+        
+        if self.navigationItem.rightBarButtonItem != nil {
+            self.navigationItem.rightBarButtonItem = nil
+        }
+        
+        if let button = self.lockButton {
+            button.isHidden = true
+        }
+        
+        if let body = self.detailBody {
+            body.isHidden = true
+        }
+        
+        if let date = self.detailDateCreated {
+            date.isHidden = true
+        }
     }
 }
 
