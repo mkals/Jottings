@@ -32,6 +32,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         self.tableView.reloadData()
         super.viewWillAppear(animated)
+        if let indexPath = selectedIndexPath {
+            self.tableView.cellForRow(at: indexPath)?.setNeedsLayout()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,6 +71,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 version.jotting = object
                 
             } else if let indexPath = self.tableView.indexPathForSelectedRow {
+                selectedIndexPath = indexPath
                 object = self.fetchedResultsController.object(at: indexPath)
             } else {
                 fatalError()
@@ -80,6 +84,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
+    var selectedIndexPath : IndexPath?
     // MARK: - Table View
 
     override func numberOfSections(in tableView: UITableView) -> Int {
