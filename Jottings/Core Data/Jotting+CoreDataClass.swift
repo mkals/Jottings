@@ -69,7 +69,7 @@ public class Jotting: NSManagedObject {
             
             let deltat = NSCalendar.current.dateComponents([Calendar.Component.minute], from: versionsArray[i].timestamp, to: versionsArray[i+1].timestamp)
             
-            if deltat.minute! < 10 {
+            if deltat.minute! < 10 && !versionsArray[i].persistent {
                 self.managedObjectContext?.delete(versionsArray[i])
             }
         }

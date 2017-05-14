@@ -64,19 +64,50 @@
                                     <constraint firstAttribute="height" id="1UL-dQ-tDL"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZrT-Cm-ZOL">
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="AQl-BQ-inC">
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="NNi-gn-EGN">
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✓" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uum-gj-lwa">
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="100"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version Saved" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1B7-oo-ABZ">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.87456515591557871" green="0.873372767200012" blue="0.89420082800155443" alpha="0.48352222711267606" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="AQl-BQ-inC" firstAttribute="centerY" secondItem="ZrT-Cm-ZOL" secondAttribute="centerY" id="GZX-U2-xCx"/>
+                                    <constraint firstAttribute="height" constant="200" id="WhP-UB-djn"/>
+                                    <constraint firstAttribute="width" constant="200" id="hyo-RW-5TY"/>
+                                    <constraint firstItem="AQl-BQ-inC" firstAttribute="centerX" secondItem="ZrT-Cm-ZOL" secondAttribute="centerX" id="scj-Li-SKm"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="0XM-y9-sOw" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="1fe-zB-hEU"/>
-                            <constraint firstItem="0XM-y9-sOw" firstAttribute="leading" secondItem="edt-Rs-jLh" secondAttribute="trailing" constant="8" symbolic="YES" id="6iT-MT-itp"/>
-                            <constraint firstItem="7ic-Fw-ole" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="8fI-Cx-emP"/>
                             <constraint firstItem="7ic-Fw-ole" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="8" symbolic="YES" id="BSB-pD-wTO"/>
                             <constraint firstAttribute="leadingMargin" secondItem="edt-Rs-jLh" secondAttribute="leading" id="ILp-ZL-aRJ"/>
                             <constraint firstItem="7ic-Fw-ole" firstAttribute="trailing" secondItem="svH-Pt-448" secondAttribute="trailingMargin" id="OHi-EY-93i"/>
                             <constraint firstAttribute="bottom" secondItem="ZLQ-vn-sPn" secondAttribute="bottom" id="QwF-VP-Tt8"/>
                             <constraint firstItem="edt-Rs-jLh" firstAttribute="centerY" secondItem="0XM-y9-sOw" secondAttribute="centerY" id="UGn-Sn-zQf"/>
                             <constraint firstItem="ZLQ-vn-sPn" firstAttribute="top" secondItem="edt-Rs-jLh" secondAttribute="bottom" constant="8" symbolic="YES" id="Z0n-hL-XuB"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="7ic-Fw-ole" secondAttribute="leading" id="Zcx-kY-o62"/>
+                            <constraint firstItem="ZrT-Cm-ZOL" firstAttribute="centerY" secondItem="svH-Pt-448" secondAttribute="centerY" id="da2-as-DUY"/>
                             <constraint firstItem="ZLQ-vn-sPn" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leading" id="g7r-ar-9Jh"/>
+                            <constraint firstItem="0XM-y9-sOw" firstAttribute="leading" secondItem="edt-Rs-jLh" secondAttribute="trailing" constant="8" symbolic="YES" id="gei-dw-IQ6"/>
+                            <constraint firstItem="ZrT-Cm-ZOL" firstAttribute="centerX" secondItem="svH-Pt-448" secondAttribute="centerX" id="hFn-XM-bot"/>
                             <constraint firstAttribute="trailing" secondItem="ZLQ-vn-sPn" secondAttribute="trailing" id="vBy-bf-zYf"/>
                             <constraint firstItem="0XM-y9-sOw" firstAttribute="top" secondItem="7ic-Fw-ole" secondAttribute="bottom" constant="8" symbolic="YES" id="vSy-IN-Bi7"/>
                         </constraints>
@@ -105,6 +136,7 @@
                         <outlet property="detailDateCreated" destination="0XM-y9-sOw" id="xzc-Da-Hky"/>
                         <outlet property="detailTitle" destination="k0z-gV-d64" id="Vg3-IZ-hcr"/>
                         <outlet property="lockButton" destination="edt-Rs-jLh" id="vTO-Pu-wPU"/>
+                        <outlet property="savedPopup" destination="ZrT-Cm-ZOL" id="uxE-3v-dW8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>

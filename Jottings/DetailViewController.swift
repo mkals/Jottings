@@ -15,6 +15,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     @IBOutlet weak var detailTitle: UITextField!
     
     @IBOutlet weak var lockButton: UIButton!
+    @IBOutlet weak var savedPopup: UIView!
     
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
@@ -24,10 +25,11 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     var saveTimer: Timer = Timer.init()
     var needsSave: Bool = false {
         didSet {
-            if needsSave == true && !saveTimer.isValid {
-                saveTimer = Timer.scheduledTimer(timeInterval: TimeInterval.init(3), target: self, selector: #selector(save), userInfo: nil, repeats: false)
-            }
-            if needsSave == false {
+            if needsSave {
+                if !saveTimer.isValid {
+                    saveTimer = Timer.scheduledTimer(timeInterval: TimeInterval.init(3), target: self, selector: #selector(save), userInfo: nil, repeats: false)
+                }
+            } else {
                 saveTimer.invalidate()
             }
         }
@@ -43,7 +45,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
                 dateFormatter.dateStyle = .medium
                 dateFormatter.timeStyle = .none
                 
-                field.text = "Created: " + dateFormatter.string(from: detail.timestamp) + " with versions: " + String(describing: detail.versions?.count)
+                field.text = "Created " + dateFormatter.string(from: detail.timestamp)
             }
             
             if let field = detailBody {
@@ -83,7 +85,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     
     var locked : Bool = false {
         didSet {
-            //Update UI to reflext new locked state
+            //Update UI to reflect new locked state
             if indexForVersion != nil {
                 return
             }
@@ -111,13 +113,32 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         locked = !locked
         
         // save locked state
-        detailItem?.locked = locked
-        needsSave = true
+        if let item = self.detailItem {
+            item.locked = locked
+            if locked {
+                item.versionAt(indexPath: self.indexForVersion).persistent = true
+                animateSavedPopoup()
+            }
+
+            needsSave = true
+        }
     }
+    
+    func animateSavedPopoup() {
+        savedPopup.isHidden = false
+        savedPopup.alpha = 1
+        UIView.animate(withDuration: 0.5, delay: 1.5, options: UIViewAnimationOptions.curveLinear, animations: {
+            self.savedPopup.alpha = 0
+        }, completion: { (apple) in
+            self.savedPopup.isHidden = true
+        })
+    }
+        
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.detailTitle.delegate = self
+        savedPopup.layer.cornerRadius = 10
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -229,6 +250,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
                 let oldVersion = detail.versionAt(indexPath: indexForVersion)
                 newVersion.body = oldVersion.body
                 newVersion.title = oldVersion.title
+                oldVersion.persistent = true    // make sure this potential end version is not automatically deleted
             }
         }
         self.dismiss(animated: true, completion: nil)

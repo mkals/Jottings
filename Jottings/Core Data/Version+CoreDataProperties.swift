@@ -17,6 +17,7 @@ extension Version {
     }
     
     @NSManaged public var body: String?
+    @NSManaged public var persistent: Bool
     @NSManaged public var timestamp: Date
     @NSManaged public var title: String?
     @NSManaged public var jotting: Jotting?

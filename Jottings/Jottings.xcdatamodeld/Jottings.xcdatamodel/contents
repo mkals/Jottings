@@ -9,12 +9,13 @@
     </entity>
     <entity name="Version" representedClassName=".Version" syncable="YES">
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="persistent" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="jotting" maxCount="1" deletionRule="Nullify" destinationEntity="Jotting" inverseName="versions" inverseEntity="Jotting" syncable="YES"/>
     </entity>
     <elements>
         <element name="Jotting" positionX="261" positionY="189" width="128" height="105"/>
-        <element name="Version" positionX="450" positionY="191" width="128" height="105"/>
+        <element name="Version" positionX="450" positionY="191" width="128" height="120"/>
     </elements>
 </model>

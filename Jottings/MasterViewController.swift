@@ -19,7 +19,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         // Do additional setup after loading the view
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-
+        
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
@@ -27,7 +27,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         self.tableView.reloadData()
@@ -36,7 +36,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             self.tableView.cellForRow(at: indexPath)?.setNeedsLayout()
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
