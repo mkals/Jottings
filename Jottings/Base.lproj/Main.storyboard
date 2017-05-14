@@ -170,6 +170,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="B8y-i8-ozf"/>
                     <value key="contentSizeForViewInPopover" type="size" width="400" height="200"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="400" height="200"/>
                 </viewController>
@@ -290,7 +291,7 @@
                     <toolbarItems>
                         <barButtonItem image="info-toolbar" id="ILQ-uf-uof">
                             <connections>
-                                <segue destination="oD7-6V-6ek" kind="popoverPresentation" popoverAnchorBarButtonItem="ILQ-uf-uof" id="ibh-Jo-ILe">
+                                <segue destination="oD7-6V-6ek" kind="popoverPresentation" identifier="infoSeque" popoverAnchorBarButtonItem="ILQ-uf-uof" id="ibh-Jo-ILe">
                                     <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                                 </segue>
                             </connections>
