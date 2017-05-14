@@ -119,7 +119,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
                 item.versionAt(indexPath: self.indexForVersion).persistent = true
                 animateSavedPopoup()
             }
-
+            
             needsSave = true
         }
     }
@@ -279,6 +279,19 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         if let date = self.detailDateCreated {
             date.isHidden = true
         }
+        
+        // Instruction image
+        let image = UIImageView.init()
+        image.image = #imageLiteral(resourceName: "Instructions")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        
+        image.heightAnchor.constraint(equalToConstant: #imageLiteral(resourceName: "Instructions").size.height)
+        image.widthAnchor.constraint(equalToConstant: #imageLiteral(resourceName: "Instructions").size.width)
+        
+        self.view.addSubview(image)
+        
+        NSLayoutConstraint(item: image, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: image, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
     }
 }
 

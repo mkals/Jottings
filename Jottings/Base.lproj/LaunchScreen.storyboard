@@ -17,7 +17,14 @@
                     <view key="view" contentMode="scaleToFill" id="Gn8-aV-gWz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Instructions" translatesAutoresizingMaskIntoConstraints="NO" id="L6x-rP-snu"/>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="L6x-rP-snu" firstAttribute="centerY" secondItem="Gn8-aV-gWz" secondAttribute="centerY" id="N5q-ln-UDT"/>
+                            <constraint firstItem="L6x-rP-snu" firstAttribute="centerX" secondItem="Gn8-aV-gWz" secondAttribute="centerX" id="h7f-kl-8Gp"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome!" id="teI-wD-qTr"/>
                 </viewController>
@@ -106,4 +113,7 @@
             <point key="canvasLocation" x="588" y="542.87856071964018"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Instructions" width="374" height="181"/>
+    </resources>
 </document>
