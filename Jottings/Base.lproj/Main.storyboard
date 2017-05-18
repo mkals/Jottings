@@ -91,7 +91,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.87456515591557871" green="0.873372767200012" blue="0.89420082800155443" alpha="0.48352222711267606" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.87456515591557871" green="0.873372767200012" blue="0.89420082800155443" alpha="0.87596280809859151" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="AQl-BQ-inC" firstAttribute="centerY" secondItem="ZrT-Cm-ZOL" secondAttribute="centerY" id="GZX-U2-xCx"/>
                                     <constraint firstAttribute="height" constant="200" id="WhP-UB-djn"/>
@@ -183,7 +183,7 @@
             </objects>
             <point key="canvasLocation" x="1587" y="-631"/>
         </scene>
-        <!--Version-->
+        <!--Versions-->
         <scene sceneID="8ON-2Y-EzA">
             <objects>
                 <tableViewController id="f0H-76-31j" customClass="VersionsTableViewController" customModule="Jottings" customModuleProvider="target" sceneMemberID="viewController">
@@ -230,7 +230,7 @@
                             <outlet property="delegate" destination="f0H-76-31j" id="TIK-7f-Ss8"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Version" id="JHh-8T-Z4T">
+                    <navigationItem key="navigationItem" title="Versions" id="JHh-8T-Z4T">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="1CM-8W-pCC">
                             <connections>
                                 <action selector="cancel:" destination="f0H-76-31j" id="Ezb-24-KUx"/>
