@@ -76,7 +76,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         }
     }
     
-    func setTitleWidth() {
+    @objc func setTitleWidth() {
         if let field = detailTitle {
             let width = self.view.bounds.width - 50
             field.bounds = CGRect.init(x: field.bounds.minX, y: field.bounds.minY, width: width, height: field.bounds.height)
@@ -167,7 +167,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         save()
     }
     
-    func keyboardWillMove(notification: NSNotification) {
+    @objc func keyboardWillMove(notification: NSNotification) {
         let userInfo = notification.userInfo!
             
         let animationDuration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
@@ -181,7 +181,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         UIView.animate(withDuration: animationDuration, delay: 0.0, options: [.beginFromCurrentState, animationCurve], animations: { self.view.layoutIfNeeded() }, completion: nil)
     }
     
-    func textEditingOccured() {
+    @objc func textEditingOccured() {
         needsSave = true
     }
     
@@ -199,7 +199,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     /*!
      * @discussion Function to save current detail item at appropirate time intervals to ensure power efficiency and limit the possibility of data loss.
      */
-    func save() {
+    @objc func save() {
         if !needsSave {
             return
         }
@@ -241,7 +241,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     /*!
      * @discussion Reverts to current version by copying its state to a new version with the current time stamp.
      */
-    func revertToThisVersion() {
+    @objc func revertToThisVersion() {
         if let detail = self.detailItem {
             if let context = self.detailItem?.managedObjectContext {
                 let newVersion = Version(context: context)
